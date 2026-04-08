@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTRO | English Learning Journal</title>
+    <meta name="description"
+        content="Comprehensive 16-unit beginner English learning platform based on Interchange Intro.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#d4d4d4",
+                        "outline": "#757777",
+                        "on-secondary-fixed-variant": "#5b5b5b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#433700",
+                        "primary-dim": "#5f4e00",
+                        "secondary-container": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#586700",
+                        "error": "#b02500",
+                        "surface-dim": "#d2d5d5",
+                        "tertiary-fixed": "#def76e",
+                        "on-primary": "#fff2ce",
+                        "surface-container": "#e7e8e8",
+                        "secondary": "#5b5b5b",
+                        "on-tertiary-container": "#4f5d00",
+                        "background": "#f6f6f6",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#dbdddd",
+                        "primary-fixed": "#fdd400",
+                        "on-surface-variant": "#5a5c5c",
+                        "on-primary-container": "#594a00",
+                        "on-tertiary": "#e6fe75",
+                        "inverse-on-surface": "#9c9d9d",
+                        "inverse-primary": "#fdd400",
+                        "inverse-surface": "#0c0f0f",
+                        "on-error-container": "#520c00",
+                        "on-secondary-container": "#525252",
+                        "on-secondary": "#f3f3f3",
+                        "secondary-dim": "#4f4f4f",
+                        "on-surface": "#2d2f2f",
+                        "surface-container-low": "#f0f1f1",
+                        "on-error": "#ffefec",
+                        "on-tertiary-fixed": "#3e4900",
+                        "error-dim": "#b92902",
+                        "on-primary-fixed-variant": "#645300",
+                        "on-background": "#2d2f2f",
+                        "tertiary-fixed-dim": "#d0e862",
+                        "tertiary-dim": "#485500",
+                        "error-container": "#f95630",
+                        "tertiary": "#536200",
+                        "tertiary-container": "#def76e",
+                        "primary-container": "#fdd400",
+                        "surface-bright": "#f6f6f6",
+                        "surface": "#f6f6f6",
+                        "surface-variant": "#dbdddd",
+                        "surface-tint": "#6d5a00",
+                        "primary": "#6d5a00",
+                        "primary-fixed-dim": "#edc600",
+                        "surface-container-high": "#e1e3e3",
+                        "on-secondary-fixed": "#3f3f3f",
+                        "outline-variant": "#acadad",
+                        "success": "#536200"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Lexend"],
+                        "label": ["Lexend"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            /* Tonal Palette tokens for internal legacy JS components */
+            --surface: #f6f6f6;
+            --surface-container: #e7e8e8;
+            --surface-container-low: #f0f1f1;
+            --surface-container-lowest: #ffffff;
+            --surface-variant: #dbdddd;
+
+            --primary: #6d5a00;
+            --primary-container: #fdd400;
+            --primary-fixed: #fdd400;
+            --on-primary-fixed: #433700;
+
+            --secondary-container: #e2e2e2;
+            --on-secondary: #f3f3f3;
+
+            --outline-variant: #acadad;
+            --ghost-border: rgba(172, 173, 173, 0.15);
+
+            --on-surface: #2d2f2f;
+            --on-surface-variant: #5a5c5c;
+
+            --success: #536200;
+            --error: #b02500;
+
+            --font-display: 'Manrope', sans-serif;
+            --font-body: 'Lexend', sans-serif;
+
+            --shadow-ambient: 0 40px 40px rgba(45, 47, 47, 0.06);
+            --radius-md: 0.75rem;
+            --radius-xl: 1.5rem;
+        }
+
+        body {
+            background-color: var(--surface);
+            color: var(--on-surface);
+            font-family: 'Lexend', sans-serif;
+            min-height: 100vh;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .highlighter-gradient {
+            background: linear-gradient(135deg, #fdd400 0%, #edc600 100%);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Legacy Component Structural Styles for JS Content */
+        .card {
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--ghost-border);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-ambient);
+        }
+        @media (min-width: 768px) {
+            .card { padding: 32px; }
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--on-surface);
+            font-family: var(--font-display);
+        }
+
+        .card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 20px 0 12px;
+            color: var(--primary);
+            font-family: var(--font-display);
+        }
+
+        .card p,
+        .card li {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--on-surface-variant);
+            font-family: var(--font-body);
+        }
+
+        .card ul,
+        .card ol {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .card ul li,
+        .card ol li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+        }
+
+        .card ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.2em;
+        }
+
+        .example {
+            background: var(--surface-container-low);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin: 12px 0;
+            font-size: 15px;
+            color: var(--on-surface);
+        }
+
+        .example em {
+            color: var(--primary);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .example .trans {
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .grammar-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 16px 0;
+            background: var(--surface-container-lowest);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            display: block;
+            border: 1px solid var(--ghost-border);
+        }
+
+        .grammar-table th {
+            background: var(--surface-container-low);
+            color: var(--on-surface);
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--font-display);
+        }
+
+        .grammar-table td {
+            padding: 12px 16px;
+            font-size: 15px;
+            color: var(--on-surface-variant);
+            border-top: 1px solid var(--ghost-border);
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .vocab-item {
+            background: var(--surface-container-highest);
+            border: 1px solid var(--ghost-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            transition: all .2s;
+            box-shadow: 0 2px 8px rgba(45, 47, 47, 0.02);
+        }
+
+        .vocab-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-ambient);
+        }
+
+        .vocab-item .word {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 18px;
+            font-family: var(--font-display);
+        }
+
+        .vocab-item .type {
+            font-size: 12px;
+            color: var(--on-surface-variant);
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .exercise {
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--ghost-border);
+            border-radius: var(--radius-xl);
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: var(--shadow-ambient);
+        }
+        @media (min-width: 768px) {
+            .exercise { padding: 24px; }
+        }
+
+        .exercise input[type=text] {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--primary);
+            color: var(--on-surface);
+            padding: 6px 4px;
+            font: 16px var(--font-body);
+            width: 160px;
+            margin: 0 6px;
+            border-radius: 0;
+        }
+
+        .exercise input:focus {
+            outline: none;
+            border-bottom-color: var(--primary-dim);
+        }
+
+        .exercise input.correct {
+            border-bottom-color: var(--success);
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .exercise input.wrong {
+            border-bottom-color: var(--error);
+            color: var(--error);
+        }
+
+        .exercise select {
+            background: var(--surface-container-low);
+            border: none;
+            color: var(--on-surface);
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            margin: 0 4px;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            background: linear-gradient(135deg, var(--primary), var(--primary-container));
+            color: var(--on-primary-fixed);
+            border: none;
+        }
+
+        .dialogue {
+            margin: 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dialogue .line {
+            display: flex;
+            gap: 16px;
+        }
+
+        .dialogue .speaker {
+            min-width: 60px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
+            padding-top: 12px;
+        }
+
+        .dialogue .text {
+            font-size: 16px;
+            color: var(--on-surface);
+            background: var(--surface-container-lowest);
+            padding: 12px 20px;
+            border-radius: 0 16px 16px 16px;
+            border: 1px solid var(--ghost-border);
+            flex: 1;
+        }
+
+        .dialogue .line:nth-child(even) .text {
+            background: var(--surface-container-low);
+            border-radius: 16px 0 16px 16px;
+            border: none;
+        }
+
+        .reading-passage {
+            font-size: 16px;
+            line-height: 2;
+            color: var(--on-surface);
+        }
+
+        .opinion-q textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--primary);
+            padding: 12px 4px;
+            min-height: 60px;
+        }
+
+        .tip {
+            background: var(--surface-container-low);
+            border-left: 4px solid var(--success);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .mc-option {
+            display: block;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 1px solid var(--ghost-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            background: var(--surface-container-lowest);
+            transition: all .2s;
+        }
+
+        .mc-option.selected {
+            background: var(--surface-container-highest);
+            font-weight: 600;
+        }
+
+        .mc-option.correct-answer {
+            border-color: var(--success);
+            background: var(--surface-container-low);
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .mc-option.wrong-answer {
+            border-color: var(--error);
+            background: var(--surface-container-low);
+            color: var(--error);
+            text-decoration: line-through;
+        }
+
+        .score-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 16px;
+        }
+
+        .score-box.good {
+            background: var(--surface-container-low);
+            color: var(--success);
+        }
+
+        .score-box.bad {
+            background: var(--surface-container-low);
+            color: var(--error);
+        }
+    </style>
+</head>
+
+<body class="bg-background font-body text-on-surface antialiased min-h-screen">
+    <!-- TopNavBar -->
+    <header
+        class="fixed top-0 w-full z-50 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-[0_40px_40px_rgba(45,47,47,0.06)]">
+        <nav class="flex justify-between items-center px-4 md:px-8 py-4 max-w-screen-2xl mx-auto">
+            <div class="flex items-center gap-12">
+                <a href="#"
+                    class="font-['Manrope'] font-black text-2xl tracking-tighter text-neutral-900 dark:text-white"
+                    onclick="showOverview()">INTRO</a>
+                <div class="hidden md:flex items-center gap-8 font-['Lexend'] text-sm tracking-tight" id="topNavLinks">
+                    <!-- Links for Top Nav Overview -->
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="material-symbols-outlined text-on-surface hover:bg-neutral-50 dark:hover:bg-neutral-800 p-2 rounded-full transition-all duration-300 scale-95 active:scale-90 flex items-center justify-center">account_circle</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 md:pt-32 pb-24 px-4 md:px-8 max-w-screen-2xl mx-auto min-h-[85vh]">
+
+        <!-- Overview Layout (Dashboard) -->
+        <div id="overviewLayout" class="animate-[fadeIn_0.4s_ease-out]">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Unit Layout (Sidebar + Content) -->
+        <div id="unitLayout" class="hidden grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 animate-[fadeIn_0.4s_ease-out]">
+            
+            <!-- Mobile Sidebar Toggle -->
+            <div class="lg:hidden -mb-4">
+                <button onclick="document.getElementById('sidebarBlock').classList.toggle('hidden')" class="w-full flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl font-bold border border-outline-variant/20 shadow-sm active:scale-[0.98] transition-all">
+                    <span class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">menu_book</span>
+                        Curriculum Modules
+                    </span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+            </div>
+
+            <!-- Sidebar -->
+            <aside id="sidebarBlock" class="hidden lg:block lg:col-span-3 space-y-4">
+                <div class="sticky top-32">
+                    <h3 class="hidden lg:block font-headline font-bold text-lg mb-6 border-b border-outline-variant/15 pb-4">Curriculum
+                        Nodes</h3>
+                    <div class="space-y-2" id="sidebarNav">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="lg:col-span-9">
+                <div id="heroSection"></div>
+                <div id="tabsBar" class="mb-8"></div>
+                <div id="contentArea" class="animate-[fadeIn_0.4s_ease-out]">
+                    <!-- Lesson HTML injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-12 px-4 md:px-8 bg-surface border-t border-outline-variant/20 mt-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-screen-2xl mx-auto">
+            <div class="flex flex-col gap-2 md:items-start items-center">
+                <span class="font-['Manrope'] font-bold text-on-surface">INTRO</span>
+                <p class="font-['Lexend'] text-xs uppercase tracking-widest text-on-surface-variant">© 2024 INTRO
+                    Linguistic Journal.</p>
+            </div>
+            <div class="flex gap-8">
+                <a class="font-['Lexend'] text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors.opacity-80.hover:opacity-100"
+                    href="#">Methodology</a>
+                <a class="font-['Lexend'] text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors.opacity-80.hover:opacity-100"
+                    href="#">Research</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const TABS_GRAMMAR = ["📐 Grammar", "✏️ Exercises", "📖 Reading", "💬 Conversation"];
+        const TAB_VOCAB = "Vocabulary";
+        const TABS_PC = ["Quiz", "Reading", "Speaking"];
+
+        const UNITS = [
+            { id: 1, title: "It's nice to meet you.", g1: "Verb Be", g2: "Possessives" },
+            { id: 2, title: "What's this?", g1: "Articles", g2: "Prepositions" },
+            { id: 3, title: "Where are you from?", g1: "Verb Be — Affirmative", g2: "Verb Be — Negative & Questions" },
+            { id: 4, title: "Whose jeans are these?", g1: "Possessives", g2: "Present Continuous" },
+            { id: 5, title: "What are you doing?", g1: "Present Continuous", g2: "Time Clauses" },
+            { id: 6, title: "My sister works downtown.", g1: "Simple Present - Statements", g2: "Simple Present - Questions" },
+            { id: 7, title: "Does it have a view?", g1: "There is/There are", g2: "Simple Present Short Answers" },
+            { id: 8, title: "What do you do?", g1: "Jobs", g2: "Adjective Placement" },
+            { id: 9, title: "Do we need any eggs?", g1: "Count/Noncount Nouns", g2: "Some and Any" },
+            { id: 10, title: "What sports do you play?", g1: "Can for Ability", g2: "Sports Vocabulary" },
+            { id: 11, title: "What are you going to do?", g1: "Be Going To", g2: "Future Time Expressions" },
+            { id: 12, title: "What's the matter?", g1: "Have/Feel", g2: "Imperatives" },
+            { id: 13, title: "You can't miss it.", g1: "Prepositions of Place", g2: "Directions" },
+            { id: 14, title: "Did you have fun?", g1: "Simple Past Statements", g2: "Simple Past Questions" },
+            { id: 15, title: "Where were you born?", g1: "Past of Be (was/were)", g2: "Wh- Questions with Be" },
+            { id: 16, title: "Can she call you later?", g1: "Object Pronouns", g2: "Scheduling" }
+        ];
+
+        let currentType = 'overview'; // 'overview', 'unit', or 'pc'
+        let currentUnit = 1;
+        let currentGrammar = 1;
+        let currentTab = 0;
+        let isVocabView = false;
+        let currentPC = 0;
+
+        function init() {
+            renderTopNav();
+            showOverview(); // Start on the dashboard
+        }
+
+        function renderTopNav() {
+            const nav = document.getElementById('topNavLinks');
+            nav.innerHTML = `
+                <a class="text-neutral-900 font-bold border-b-2 border-yellow-400 pb-1 cursor-pointer" onclick="showOverview()">Units Overview</a>
+                <a class="text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer" onclick="selectOverviewUnit(1)">Lessons</a>
+            `;
+        }
+
+        function showOverview() {
+            currentType = 'overview';
+            document.getElementById('overviewLayout').style.display = 'block';
+            document.getElementById('unitLayout').style.display = 'none';
+            buildOverview();
+        }
+
+        function buildOverview() {
+            let html = `
+            <section class="mb-16 md:mb-24 grid grid-cols-12 gap-8 items-end">
+                <div class="col-span-12 lg:col-span-9">
+                    <h1 class="font-headline font-black text-[clamp(3.5rem,8vw,5.5rem)] leading-[0.95] tracking-tighter mb-8 text-on-surface break-words">
+                        Master the <span class="relative inline-block">Language<span class="absolute bottom-2 left-0 w-full h-4 bg-primary-fixed/40 -z-10"></span></span> of Opportunity.
+                    </h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <p class="text-on-surface-variant text-lg leading-relaxed font-body">
+                            Welcome to your linguistic journey. INTRO blends high-end editorial clarity with intentional learning paths to guide you from basic fluency to professional mastery.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="space-y-12">
+                <div class="flex items-baseline justify-between mb-8">
+                    <h2 class="font-headline font-extrabold text-3xl tracking-tight">The Curriculum</h2>
+                    <div class="h-px flex-grow mx-8 bg-outline-variant/15"></div>
+                    <p class="font-label text-sm text-on-surface-variant">16 UNITS • 8 PROGRESS CHECKS</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">`;
+
+            UNITS.forEach(u => {
+                html += `
+                <div class="group bg-surface-container-lowest p-8 rounded-xl hover:translate-y-[-4px] transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-md cursor-pointer" onclick="selectOverviewUnit(${u.id})">
+                    <span class="font-headline font-black text-4xl text-surface-container-highest group-hover:text-primary-fixed transition-colors">${u.id < 10 ? '0' + u.id : u.id}</span>
+                    <h3 class="font-headline font-bold text-xl mt-4 mb-2 truncate">${u.title}</h3>
+                    <p class="text-on-surface-variant text-sm mb-6 line-clamp-2">${u.g1} • ${u.g2}</p>
+                    <span class="text-primary font-bold text-sm inline-flex items-center gap-2 group-hover:gap-4 transition-all">Start Unit <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+                </div>`;
+
+                if (u.id % 2 === 0) {
+                    let pc = u.id / 2;
+                    html += `
+                    <div class="col-span-full lg:col-span-2 bg-primary-fixed p-8 rounded-xl flex flex-col justify-between border-2 border-primary-fixed shadow-[0_20px_40px_rgba(253,212,0,0.15)] group cursor-pointer" onclick="selectOverviewPC(${pc})">
+                        <div class="flex flex-col md:flex-row justify-between md:items-start gap-4">
+                            <div>
+                                <span class="bg-on-primary-fixed text-primary-fixed px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">Checkpoint ${pc}</span>
+                                <h3 class="font-headline font-black text-2xl text-on-primary-fixed mt-4">Progress Check: Units ${u.id - 1}-${u.id}</h3>
+                            </div>
+                            <span class="material-symbols-outlined text-4xl text-on-primary-fixed/30" data-icon="verified">verified</span>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            html += `</div></section>`;
+            document.getElementById('overviewLayout').innerHTML = html;
+        }
+
+        function showUnitLayout() {
+            document.getElementById('overviewLayout').style.display = 'none';
+            document.getElementById('unitLayout').style.display = 'grid';
+        }
+
+        function selectOverviewUnit(id) {
+            showUnitLayout();
+            toggleUnit(id);
+            window.scrollTo(0, 0);
+        }
+
+        function selectOverviewPC(pcNum) {
+            showUnitLayout();
+            selectPC(pcNum);
+            window.scrollTo(0, 0);
+        }
+
+        function buildSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            let html = '';
+
+            UNITS.forEach(u => {
+                const isActiveUnit = currentType === 'unit' && currentUnit === u.id;
+                const btnClass = isActiveUnit ? "bg-primary-fixed text-on-primary-fixed shadow-sm" : "hover:bg-surface-container-low text-on-surface-variant";
+                const chevronRotate = isActiveUnit ? "rotate-180" : "";
+
+                html += `
+                <div class="space-y-1 mb-2">
+                    <button class="w-full flex items-center justify-between p-4 rounded-xl font-medium transition-colors ${btnClass}" onclick="toggleUnit(${u.id})">
+                        <span class="flex items-center gap-3">
+                            <span class="font-headline font-black opacity-50 text-lg">${u.id < 10 ? '0' + u.id : u.id}</span>
+                            <span class="text-left leading-tight truncate pr-2">${u.title}</span>
+                        </span>
+                        <span class="material-symbols-outlined text-sm transform transition-transform duration-300 ${chevronRotate}">expand_more</span>
+                    </button>
+                    <div class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: ${isActiveUnit ? '200px' : '0'};">
+                        <div class="pl-12 pr-4 py-2 space-y-1 border-l-2 border-surface-variant ml-6 mb-2 mt-1">
+                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && currentGrammar === 1 && !isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectGrammar(${u.id},1)">G1: ${u.g1}</button>
+                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && currentGrammar === 2 && !isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectGrammar(${u.id},2)">G2: ${u.g2}</button>
+                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectVocab(${u.id})">Vocabulary</button>
+                        </div>
+                    </div>
+                </div>`;
+
+                if (u.id % 2 === 0) {
+                    let pc = u.id / 2;
+                    const isActivePC = currentType === 'pc' && currentPC === pc;
+                    const pcClass = isActivePC ? "bg-surface-container-lowest border-2 border-success text-success shadow-md" : "hover:bg-surface-container-lowest text-on-surface border border-outline-variant/20 hover:border-success/50";
+
+                    html += `
+                    <button class="w-full flex items-center gap-3 p-4 rounded-xl font-medium transition-colors mb-4 ${pcClass}" onclick="selectPC(${pc})">
+                        <span class="material-symbols-outlined ${isActivePC ? 'text-success' : 'text-outline-variant'}">verified</span>
+                        <span>Progress Check ${u.id - 1}-${u.id}</span>
+                    </button>`;
+                }
+            });
+            nav.innerHTML = html;
+        }
+
+        function toggleUnit(id) {
+            const wasActive = (currentType === 'unit' && currentUnit === id);
+            if (!wasActive) {
+                selectGrammar(id, 1);
+            } else {
+                // If it is already active clicking it again just stays there?
+            }
+        }
+
+        function closeMobileSidebar() {
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebarBlock').classList.add('hidden');
+            }
+        }
+
+        function selectGrammar(unitId, grammarNum) {
+            currentType = 'unit';
+            currentUnit = unitId;
+            currentGrammar = grammarNum;
+            currentTab = 0;
+            isVocabView = false;
+
+            buildSidebar();
+            renderHero();
+            renderTabs();
+            renderContent();
+            closeMobileSidebar();
+        }
+
+        function selectVocab(unitId) {
+            currentType = 'unit';
+            currentUnit = unitId;
+            isVocabView = true;
+            currentTab = 0;
+
+            buildSidebar();
+            renderHero();
+            renderTabs();
+            renderContent();
+            closeMobileSidebar();
+        }
+
+        function selectPC(pcNum) {
+            currentType = 'pc';
+            currentPC = pcNum;
+            currentTab = 0;
+
+            buildSidebar();
+            renderHero();
+            renderTabs();
+            renderContent();
+            closeMobileSidebar();
+        }
+
+        function renderHero() {
+            const hero = document.getElementById('heroSection');
+            if (currentType === 'unit') {
+                const u = UNITS.find(x => x.id === currentUnit);
+                let tag = isVocabView ? 'Vocabulary' : (currentGrammar === 1 ? u.g1 : u.g2);
+                hero.innerHTML = `
+                <section class="grid grid-cols-12 gap-8 mb-8 items-end">
+                    <div class="col-span-12 md:col-span-10">
+                        <span class="font-label uppercase tracking-widest text-primary font-bold text-xs mb-4 block">Unit ${u.id}</span>
+                        <h1 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface leading-[0.9] mb-4 break-words hyphens-auto">${u.title}</h1>
+                        <p class="font-body text-xl text-primary max-w-xl leading-relaxed italic border-l-4 border-primary-fixed pl-4">${tag}</p>
+                    </div>
+                </section>`;
+            } else if (currentType === 'pc') {
+                hero.innerHTML = `
+                <section class="grid grid-cols-12 gap-8 mb-8 items-end">
+                    <div class="col-span-12 md:col-span-10">
+                        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Checkpoint ${currentPC}</span>
+                        <h1 class="font-headline font-extrabold text-4xl md:text-6xl text-on-surface tracking-tighter leading-[1] md:leading-none mb-6">
+                           Progress <br/><span class="text-primary-dim">Check ${currentPC * 2 - 1} & ${currentPC * 2}</span>
+                        </h1>
+                    </div>
+                </section>`;
+            }
+        }
+
+        function renderTabs() {
+            const bar = document.getElementById('tabsBar');
+            let html = '<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">';
+
+            if (currentType === 'pc') {
+                html += TABS_PC.map((t, i) => `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold transition-all ${i === currentTab ? 'bg-success text-white shadow-md' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchTab(${i})">${t}</button>`).join('');
+            } else if (isVocabView) {
+                html += `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold bg-primary-fixed text-on-primary-fixed shadow-md">Vocabulary Grid</button>`;
+            } else {
+                html += TABS_GRAMMAR.map((t, i) => `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold transition-all ${i === currentTab ? 'bg-primary-fixed text-on-primary-fixed shadow-md' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchTab(${i})">${t}</button>`).join('');
+            }
+            html += '</div>';
+            bar.innerHTML = html;
+        }
+
+        function switchTab(i) {
+            currentTab = i;
+            renderTabs();
+
+            // Re-trigger fade in animation on content
+            const content = document.getElementById('contentArea');
+            content.classList.remove('animate-[fadeIn_0.4s_ease-out]');
+            void content.offsetWidth; // trigger reflow
+            content.classList.add('animate-[fadeIn_0.4s_ease-out]');
+
+            renderContent();
+        }
+
+        function renderContent() {
+            const area = document.getElementById('contentArea');
+            let data = null;
+
+            if (currentType === 'pc') {
+                data = window['pc' + currentPC];
+            } else if (isVocabView) {
+                data = window['unit' + currentUnit + 'vocab'];
+            } else {
+                data = window['unit' + currentUnit + 'g' + currentGrammar];
+            }
+
+            if (data && data[currentTab] !== undefined) {
+                area.innerHTML = data[currentTab];
+            } else {
+                let sectionLabel = currentType === 'pc' ? TABS_PC[currentTab] : (isVocabView ? 'Vocabulary' : TABS_GRAMMAR[currentTab]);
+                area.innerHTML = `<div class="card bg-surface-container-highest border-dashed border-2 border-outline-variant/50 flex flex-col items-center justify-center p-16 text-center">
+                    <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-4">construction</span>
+                    <h3 class="font-headline font-bold text-2xl">🚧 ${sectionLabel} - In Production</h3>
+                    <p class="font-body text-on-surface-variant mt-2 max-w-md">This content module is currently being finalized for the Interchange Intro curriculum.</p>
+                </div>`;
+            }
+        }
+
+        function checkFill(btn, exId) {
+            const wrap = document.getElementById(exId);
+            const inputs = wrap.querySelectorAll('input[data-answer]');
+            let correct = 0;
+            inputs.forEach(inp => {
+                const ans = inp.dataset.answer.toLowerCase().split('|');
+                if (ans.includes(inp.value.trim().toLowerCase())) { inp.className = 'correct'; correct++; }
+                else { inp.className = 'wrong'; }
+            });
+            let box = wrap.querySelector('.score-box');
+            if (!box) { box = document.createElement('div'); wrap.appendChild(box); }
+            box.className = `score-box ${correct === inputs.length ? 'good' : 'bad'}`;
+            box.textContent = `Score: ${correct}/${inputs.length}`;
+        }
+
+        function checkMC(btn, exId) {
+            const wrap = document.getElementById(exId);
+            wrap.querySelectorAll('.mc-option').forEach(o => {
+                if (o.dataset.correct === 'true') o.className = 'mc-option correct-answer';
+                else if (o.classList.contains('selected')) o.className = 'mc-option wrong-answer';
+            });
+        }
+
+        function selectMC(el) {
+            let sibling = el.previousElementSibling;
+            while (sibling && sibling.classList.contains('mc-option')) {
+                sibling.classList.remove('selected');
+                sibling = sibling.previousElementSibling;
+            }
+            sibling = el.nextElementSibling;
+            while (sibling && sibling.classList.contains('mc-option')) {
+                sibling.classList.remove('selected');
+                sibling = sibling.nextElementSibling;
+            }
+            el.classList.add('selected');
+        }
+    </script>
+
+    <!-- Unit 1 -->
+    <script src="units/u1g1.js"></script>
+    <script src="units/u1g2.js"></script>
+    <script src="units/u1vocab.js"></script>
+    <!-- Unit 2 -->
+    <script src="units/u2g1.js"></script>
+    <script src="units/u2g2.js"></script>
+    <script src="units/u2vocab.js"></script>
+    <!-- Progress Check 1 (Units 1-2) -->
+    <script src="units/pc1.js"></script>
+
+    <!-- (Include all other units as requested by standard build) -->
+    <script src="units/u3g1.js"></script>
+    <script src="units/u3g2.js"></script>
+    <script src="units/u3vocab.js"></script>
+    <script src="units/u4g1.js"></script>
+    <script src="units/u4g2.js"></script>
+    <script src="units/u4vocab.js"></script>
+    <script src="units/pc2.js"></script>
+    <script src="units/u5g1.js"></script>
+    <script src="units/u5g2.js"></script>
+    <script src="units/u5vocab.js"></script>
+    <script src="units/u6g1.js"></script>
+    <script src="units/u6g2.js"></script>
+    <script src="units/u6vocab.js"></script>
+    <script src="units/pc3.js"></script>
+    <script src="units/u7g1.js"></script>
+    <script src="units/u7g2.js"></script>
+    <script src="units/u7vocab.js"></script>
+    <script src="units/u8g1.js"></script>
+    <script src="units/u8g2.js"></script>
+    <script src="units/u8vocab.js"></script>
+    <script src="units/pc4.js"></script>
+    <script src="units/u9g1.js"></script>
+    <script src="units/u9g2.js"></script>
+    <script src="units/u9vocab.js"></script>
+    <script src="units/u10g1.js"></script>
+    <script src="units/u10g2.js"></script>
+    <script src="units/u10vocab.js"></script>
+    <script src="units/pc5.js"></script>
+    <script src="units/u11g1.js"></script>
+    <script src="units/u11g2.js"></script>
+    <script src="units/u11vocab.js"></script>
+    <script src="units/u12g1.js"></script>
+    <script src="units/u12g2.js"></script>
+    <script src="units/u12vocab.js"></script>
+    <script src="units/pc6.js"></script>
+    <script src="units/u13g1.js"></script>
+    <script src="units/u13g2.js"></script>
+    <script src="units/u13vocab.js"></script>
+    <script src="units/u14g1.js"></script>
+    <script src="units/u14g2.js"></script>
+    <script src="units/u14vocab.js"></script>
+    <script src="units/pc7.js"></script>
+    <script src="units/u15g1.js"></script>
+    <script src="units/u15g2.js"></script>
+    <script src="units/u15vocab.js"></script>
+    <script src="units/u16g1.js"></script>
+    <script src="units/u16g2.js"></script>
+    <script src="units/u16vocab.js"></script>
+    <script src="units/pc8.js"></script>
+
+    <script>init();</script>
+</body>
+
+</html>
