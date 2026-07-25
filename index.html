@@ -457,34 +457,48 @@
         }
 
         .speak-btn {
-            background: none;
-            border: none;
+            background: var(--surface-container);
+            border: 1px solid var(--outline-variant);
+            border-radius: 9999px;
             cursor: pointer;
-            padding: 2px;
+            padding: 6px;
             color: var(--primary);
-            opacity: 0.6;
-            transition: opacity .2s, transform .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
             line-height: 1;
+            margin-left: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .speak-btn:hover { opacity: 1; transform: scale(1.15); }
-        .speak-btn .material-symbols-outlined { font-size: 18px; }
+        .speak-btn:hover {
+            background: var(--primary-dim);
+            color: var(--surface-container-lowest);
+            transform: scale(1.15);
+            box-shadow: var(--shadow-ambient);
+        }
 
         /* Dark mode toggle btn */
         #darkToggle {
-            background: var(--surface-container);
-            border: 1px solid var(--ghost-border);
+            background: var(--primary);
+            border: 1px solid var(--primary-dim);
             border-radius: 9999px;
-            padding: 6px 12px;
+            padding: 8px 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
             font-size: 13px;
-            font-weight: 600;
-            color: var(--on-surface-variant);
+            font-weight: 700;
+            color: #ffffff !important;
             transition: all .2s;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
         }
-        #darkToggle:hover { background: var(--surface-container-low); }
+        #darkToggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
 
         /* Dark Mode variables */
         html.dark {
@@ -901,7 +915,7 @@
                             const btn = document.createElement('button');
                             btn.className = 'speak-btn';
                             btn.setAttribute('onclick', `speak(${JSON.stringify(text)})`);
-                            btn.innerHTML = `<span class="material-symbols-outlined">volume_up</span>`;
+                            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 16px; height: 16px;"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>`;
                             w.appendChild(btn);
                         }
                     }
@@ -955,18 +969,33 @@
         function toggleDark() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('icintro_dark', isDark ? '1' : '0');
-            document.getElementById('darkIcon').textContent = isDark ? 'light_mode' : 'dark_mode';
-            document.getElementById('darkLabel').textContent = isDark ? 'Light' : 'Dark';
+            updateDarkToggleButton(isDark);
         }
 
         function applyDarkPref() {
             const pref = localStorage.getItem('icintro_dark');
-            if (pref === '1') {
+            const isDark = (pref === '1');
+            if (isDark) {
                 document.documentElement.classList.add('dark');
-                const icon = document.getElementById('darkIcon');
-                const label = document.getElementById('darkLabel');
-                if (icon) icon.textContent = 'light_mode';
-                if (label) label.textContent = 'Light';
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            updateDarkToggleButton(isDark);
+        }
+
+        function updateDarkToggleButton(isDark) {
+            const btn = document.getElementById('darkToggle');
+            if (!btn) return;
+            if (isDark) {
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M3 12h2.25m13.5 0H21M5.75 12a6.25 6.25 0 1112.5 0 6.25 6.25 0 01-12.5 0z" /></svg>
+                    <span>Light</span>
+                `;
+            } else {
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25c0 5.385 4.365 9.75 9.75 9.75 3.243 0 6.108-1.58 7.866-4.001z" /></svg>
+                    <span>Dark</span>
+                `;
             }
         }
 
