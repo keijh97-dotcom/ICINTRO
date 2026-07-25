@@ -931,7 +931,13 @@
     <script src="units/u16vocab.js"></script>
     <script src="units/pc8.js"></script>
 
-    <script>init();</script>
+    <script>
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
     <script src="toolbar.js"></script>
 </body>
 
