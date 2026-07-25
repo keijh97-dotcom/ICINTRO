@@ -455,6 +455,58 @@
             background: var(--surface-container-low);
             color: var(--error);
         }
+
+        .speak-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px;
+            color: var(--primary);
+            opacity: 0.6;
+            transition: opacity .2s, transform .2s;
+            line-height: 1;
+        }
+        .speak-btn:hover { opacity: 1; transform: scale(1.15); }
+        .speak-btn .material-symbols-outlined { font-size: 18px; }
+
+        /* Dark mode toggle btn */
+        #darkToggle {
+            background: var(--surface-container);
+            border: 1px solid var(--ghost-border);
+            border-radius: 9999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            transition: all .2s;
+        }
+        #darkToggle:hover { background: var(--surface-container-low); }
+
+        /* Dark Mode variables */
+        html.dark {
+            --surface: #1a1810;
+            --surface-container: #2c291a;
+            --surface-container-low: #252214;
+            --surface-container-lowest: #14130c;
+            --surface-container-highest: #3a3520;
+            --surface-variant: #3d3928;
+            --on-surface: #f0ecda;
+            --on-surface-variant: #c8c2a8;
+            --outline-variant: #4a4530;
+            --ghost-border: rgba(200,194,168,0.12);
+            --primary: #ffd400;
+            --primary-dim: #edc600;
+            --primary-container: #4a3e00;
+            --success: #a3e635;
+            --error: #f87171;
+        }
+        html.dark header {
+            background: rgba(20,19,12,0.85) !important;
+        }
     </style>
 </head>
 
@@ -472,8 +524,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <button
-                    class="material-symbols-outlined text-on-surface hover:bg-neutral-50 dark:hover:bg-neutral-800 p-2 rounded-full transition-all duration-300 scale-95 active:scale-90 flex items-center justify-center">account_circle</button>
+                <button id="darkToggle" onclick="toggleDark()" title="Toggle dark mode">
+                    <span class="material-symbols-outlined" style="font-size:18px" id="darkIcon">dark_mode</span>
+                    <span id="darkLabel">Dark</span>
+                </button>
             </div>
         </nav>
     </header>
@@ -570,8 +624,14 @@
         let currentPC = 0;
 
         function init() {
+            applyDarkPref();
+            loadProgress();
             renderTopNav();
-            showOverview(); // Start on the dashboard
+            if (currentType !== 'overview') {
+                selectOverviewUnit(currentUnit);
+            } else {
+                showOverview();
+            }
         }
 
         function renderTopNav() {
@@ -829,6 +889,24 @@
                     <p class="font-body text-on-surface-variant mt-2 max-w-md">This content module is currently being finalized for the Interchange Intro curriculum.</p>
                 </div>`;
             }
+
+            if (isVocabView) {
+                const words = area.querySelectorAll('.vocab-item .word');
+                words.forEach(w => {
+                    if (!w.querySelector('.speak-btn')) {
+                        const clone = w.cloneNode(true);
+                        clone.querySelectorAll('button, span.type').forEach(el => el.remove());
+                        const text = clone.textContent.trim();
+                        if (text) {
+                            const btn = document.createElement('button');
+                            btn.className = 'speak-btn';
+                            btn.setAttribute('onclick', `speak(${JSON.stringify(text)})`);
+                            btn.innerHTML = `<span class="material-symbols-outlined">volume_up</span>`;
+                            w.appendChild(btn);
+                        }
+                    }
+                });
+            }
         }
 
         function checkFill(btn, exId) {
@@ -837,13 +915,17 @@
             let correct = 0;
             inputs.forEach(inp => {
                 const ans = inp.dataset.answer.toLowerCase().split('|');
-                if (ans.includes(inp.value.trim().toLowerCase())) { inp.className = 'correct'; correct++; }
-                else { inp.className = 'wrong'; }
+                if (ans.some(a => a === inp.value.trim().toLowerCase() || a === 'correct' || a === 'any')) {
+                    inp.className = 'correct'; correct++;
+                } else {
+                    inp.className = 'wrong';
+                }
             });
             let box = wrap.querySelector('.score-box');
             if (!box) { box = document.createElement('div'); wrap.appendChild(box); }
             box.className = `score-box ${correct === inputs.length ? 'good' : 'bad'}`;
-            box.textContent = `Score: ${correct}/${inputs.length}`;
+            box.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px">${correct === inputs.length ? 'check_circle' : 'cancel'}</span> Score: ${correct}/${inputs.length}`;
+            saveProgress();
         }
 
         function checkMC(btn, exId) {
@@ -852,6 +934,7 @@
                 if (o.dataset.correct === 'true') o.className = 'mc-option correct-answer';
                 else if (o.classList.contains('selected')) o.className = 'mc-option wrong-answer';
             });
+            saveProgress();
         }
 
         function selectMC(el) {
@@ -866,6 +949,54 @@
                 sibling = sibling.nextElementSibling;
             }
             el.classList.add('selected');
+        }
+
+        // ── Dark Mode ──────────────────────────────────────
+        function toggleDark() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('icintro_dark', isDark ? '1' : '0');
+            document.getElementById('darkIcon').textContent = isDark ? 'light_mode' : 'dark_mode';
+            document.getElementById('darkLabel').textContent = isDark ? 'Light' : 'Dark';
+        }
+
+        function applyDarkPref() {
+            const pref = localStorage.getItem('icintro_dark');
+            if (pref === '1') {
+                document.documentElement.classList.add('dark');
+                const icon = document.getElementById('darkIcon');
+                const label = document.getElementById('darkLabel');
+                if (icon) icon.textContent = 'light_mode';
+                if (label) label.textContent = 'Light';
+            }
+        }
+
+        // ── Pronunciation ─────────────────────────────────
+        function speak(word) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const utt = new SpeechSynthesisUtterance(word);
+            utt.lang = 'en-US';
+            utt.rate = 0.85;
+            window.speechSynthesis.speak(utt);
+        }
+
+        // ── Progress Saving ────────────────────────────────
+        function saveProgress() {
+            const state = { unit: currentUnit, grammar: currentGrammar, type: currentType, tab: currentTab, isVocab: isVocabView };
+            localStorage.setItem('icintro_progress', JSON.stringify(state));
+        }
+
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem('icintro_progress');
+                if (!saved) return;
+                const s = JSON.parse(saved);
+                if (s.unit) currentUnit = s.unit;
+                if (s.grammar) currentGrammar = s.grammar;
+                if (s.type) currentType = s.type;
+                if (s.tab !== undefined) currentTab = s.tab;
+                if (s.isVocab !== undefined) isVocabView = s.isVocab;
+            } catch(e) {}
         }
     </script>
 
