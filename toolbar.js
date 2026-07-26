@@ -1,7 +1,13 @@
 /**
  * Interactive Toolbar & Whiteboard Suite for ICINTRO (Gold Theme)
+ * - Mobile responsive toolbar with horizontal touch-scroll & toggle button (FAB)
  * - Drawings are 100% visible in real-time.
  * - Cursor mode sets pointer-events: none so the page underneath is NEVER locked or blocked!
+ * - Independent opacity per tool
+ * - Custom color picker
+ * - Keyboard text tool
+ * - Whiteboard modal
+ * - Touch screen drawing support
  */
 
 (function () {
@@ -16,13 +22,54 @@
             z-index: 9990;
             pointer-events: none;
             cursor: crosshair;
+            touch-action: none;
+        }
+
+        .tb-toggle-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10001;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45), 0 4px 10px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            outline: none;
+        }
+
+        .tb-toggle-btn:hover {
+            transform: scale(1.08) rotate(5deg);
+            background: #1d4ed8;
+            box-shadow: 0 14px 28px rgba(37, 99, 235, 0.5);
+        }
+
+        .tb-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .tb-toggle-btn .material-symbols-outlined {
+            font-size: 26px;
+            transition: transform 0.3s ease;
+        }
+
+        .tb-toggle-btn.collapsed .material-symbols-outlined {
+            transform: rotate(0deg);
         }
 
         .tb-floating-bar {
             position: fixed;
             bottom: 24px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(0) scale(1);
             z-index: 9999;
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(20px);
@@ -34,13 +81,25 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
             user-select: none;
+            opacity: 1;
+            visibility: visible;
+            max-width: calc(100vw - 32px);
+        }
+
+        .tb-floating-bar.tb-collapsed {
+            opacity: 0;
+            transform: translateX(-50%) translateY(40px) scale(0.85);
+            pointer-events: none !important;
+            visibility: hidden;
         }
 
         .tb-btn {
             width: 42px;
             height: 42px;
+            min-width: 42px;
+            flex-shrink: 0;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -56,9 +115,9 @@
         .tb-btn:hover { background: rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
 
         .tb-btn.active {
-            background: #6d5a00 !important;
+            background: #2563eb !important;
             color: #ffffff !important;
-            box-shadow: 0 4px 12px rgba(109, 90, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
 
         .tb-btn .material-symbols-outlined { font-size: 22px; }
@@ -68,17 +127,20 @@
             height: 24px;
             background: rgba(150, 150, 150, 0.3);
             margin: 0 4px;
+            flex-shrink: 0;
         }
 
         .tb-color-picker {
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
         }
 
         .tb-color-dot {
             width: 22px;
             height: 22px;
+            flex-shrink: 0;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
@@ -91,6 +153,7 @@
         #tbCustomColor {
             width: 26px;
             height: 26px;
+            flex-shrink: 0;
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -108,12 +171,13 @@
             background: rgba(0,0,0,0.04);
             padding: 4px 10px;
             border-radius: 9999px;
+            flex-shrink: 0;
         }
 
         .tb-opacity-slider {
             width: 70px;
             height: 4px;
-            accent-color: #6d5a00;
+            accent-color: #2563eb;
             cursor: pointer;
         }
 
@@ -168,6 +232,7 @@
             background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
             background-size: 24px 24px;
             cursor: crosshair;
+            touch-action: none;
         }
 
         #wbCanvas { width: 100%; height: 100%; }
@@ -193,7 +258,7 @@
         .canvas-text-input {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #6d5a00;
+            border: 2px solid #2563eb;
             color: #0f172a;
             font-family: 'Lexend', 'Manrope', sans-serif;
             font-size: 20px;
@@ -205,14 +270,119 @@
             z-index: 10005;
             min-width: 160px;
         }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .tb-toggle-btn {
+                bottom: 16px;
+                right: 16px;
+                width: 48px;
+                height: 48px;
+            }
+
+            .tb-toggle-btn .material-symbols-outlined {
+                font-size: 24px;
+            }
+
+            .tb-floating-bar {
+                bottom: 76px;
+                max-width: calc(100vw - 20px);
+                padding: 6px 10px;
+                gap: 4px;
+                border-radius: 24px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .tb-floating-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tb-btn {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+            }
+
+            .tb-btn .material-symbols-outlined {
+                font-size: 19px;
+            }
+
+            .tb-divider {
+                height: 20px;
+                margin: 0 2px;
+            }
+
+            .tb-color-picker {
+                gap: 4px;
+            }
+
+            .tb-color-dot {
+                width: 18px;
+                height: 18px;
+            }
+
+            #tbCustomColor {
+                width: 22px;
+                height: 22px;
+            }
+
+            .tb-opacity-wrap {
+                padding: 2px 6px;
+                gap: 4px;
+            }
+
+            .tb-opacity-slider {
+                width: 46px;
+            }
+
+            .tb-opacity-label {
+                font-size: 10px;
+                min-width: 26px;
+            }
+
+            .tb-tooltip {
+                display: none;
+            }
+
+            #whiteboardModal {
+                padding: 8px;
+            }
+
+            .wb-container {
+                height: 94vh;
+                border-radius: 16px;
+            }
+
+            .wb-header {
+                padding: 12px 16px;
+            }
+
+            .wb-header h3 {
+                font-size: 15px;
+            }
+        }
     `;
     document.head.appendChild(style);
 
+    // Create Canvas Layer
     const canvas = document.createElement('canvas');
     canvas.id = 'annotationCanvas';
     document.body.appendChild(canvas);
     const ctx = canvas.getContext('2d');
 
+    // Create Toggle Button (FAB)
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'tbToggleBtn';
+    toggleBtn.className = 'tb-toggle-btn';
+    toggleBtn.title = 'Mostrar / Ocultar Barra de Herramientas';
+    toggleBtn.setAttribute('aria-label', 'Mostrar / Ocultar Barra de Herramientas');
+    toggleBtn.innerHTML = `<span class="material-symbols-outlined">close</span>`;
+    document.body.appendChild(toggleBtn);
+
+    // Create Toolbar Component
     const toolbar = document.createElement('div');
     toolbar.className = 'tb-floating-bar';
     toolbar.id = 'interactiveToolbar';
@@ -256,12 +426,12 @@
         </button>
         <div class="tb-divider"></div>
         <div class="tb-color-picker">
-            <div class="tb-color-dot selected" data-color="#6d5a00" style="background:#6d5a00" title="Dorado"></div>
-            <div class="tb-color-dot" data-color="#ef4444" style="background:#ef4444" title="Rojo"></div>
+            <div class="tb-color-dot selected" data-color="#ef4444" style="background:#ef4444" title="Rojo"></div>
             <div class="tb-color-dot" data-color="#2563eb" style="background:#2563eb" title="Azul"></div>
             <div class="tb-color-dot" data-color="#22c55e" style="background:#22c55e" title="Verde"></div>
+            <div class="tb-color-dot" data-color="#eab308" style="background:#eab308" title="Amarillo"></div>
             <div class="tb-color-dot" data-color="#0f172a" style="background:#0f172a" title="Negro"></div>
-            <input type="color" id="tbCustomColor" value="#6d5a00" title="Color Personalizado">
+            <input type="color" id="tbCustomColor" value="#ef4444" title="Color Personalizado">
         </div>
         <div class="tb-divider"></div>
         <div class="tb-opacity-wrap" title="Transparencia de la herramienta activa">
@@ -270,21 +440,56 @@
             <span id="tbOpacityValue" class="tb-opacity-label">100%</span>
         </div>
         <div class="tb-divider"></div>
-        <button class="tb-btn" id="tbWhiteboardBtn" title="Abrir Pizarra Interactiva" style="background:#6d5a00;color:#fff">
+        <button class="tb-btn" id="tbWhiteboardBtn" title="Abrir Pizarra Interactiva" style="background:#2563eb;color:#fff">
             <span class="material-symbols-outlined">dashboard</span>
             <span class="tb-tooltip">Pizarra Interactiva</span>
+        </button>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" id="tbCollapseBtn" title="Ocultar Barra">
+            <span class="material-symbols-outlined">expand_more</span>
+            <span class="tb-tooltip">Ocultar Barra</span>
         </button>
     `;
     document.body.appendChild(toolbar);
 
+    // Toggle Toolbar Logic
+    let isToolbarCollapsed = false;
+
+    function setToolbarState(collapsed) {
+        isToolbarCollapsed = collapsed;
+        if (isToolbarCollapsed) {
+            toolbar.classList.add('tb-collapsed');
+            toggleBtn.classList.add('collapsed');
+            toggleBtn.innerHTML = `<span class="material-symbols-outlined">tune</span>`;
+            toggleBtn.title = "Expandir Barra de Herramientas";
+        } else {
+            toolbar.classList.remove('tb-collapsed');
+            toggleBtn.classList.remove('collapsed');
+            toggleBtn.innerHTML = `<span class="material-symbols-outlined">close</span>`;
+            toggleBtn.title = "Ocultar Barra de Herramientas";
+        }
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        setToolbarState(!isToolbarCollapsed);
+    });
+
+    const collapseBtn = document.getElementById('tbCollapseBtn');
+    if (collapseBtn) {
+        collapseBtn.addEventListener('click', () => {
+            setToolbarState(true);
+        });
+    }
+
+    // Create Whiteboard Modal
     const wbModal = document.createElement('div');
     wbModal.id = 'whiteboardModal';
     wbModal.innerHTML = `
         <div class="wb-container">
             <div class="wb-header">
                 <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-amber-600 text-2xl">draw</span>
-                    <h3 class="font-bold text-xl text-slate-800 font-['Manrope']">Pizarra Interactiva INTRO — Ejemplos, Tips & Texto</h3>
+                    <span class="material-symbols-outlined text-blue-600 text-2xl">draw</span>
+                    <h3 class="font-bold text-xl text-slate-800 font-['Manrope']">Pizarra Interactiva — Ejemplos, Tips & Texto</h3>
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="wbClearBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors flex items-center gap-2">
@@ -302,6 +507,7 @@
     `;
     document.body.appendChild(wbModal);
 
+    // Canvas Size Setup
     function initCanvasDimensions() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -309,8 +515,9 @@
     }
     window.addEventListener('resize', initCanvasDimensions);
 
+    // Data Models
     let currentTool = 'cursor';
-    let currentColor = '#6d5a00';
+    let currentColor = '#ef4444';
     let currentLineWidth = 4;
     let isDrawing = false;
     let startX = 0, startY = 0;
@@ -319,6 +526,7 @@
     let screenObjects = [];
     let wbObjects = [];
 
+    // Per Tool Opacity Settings
     const toolOpacities = {
         cursor: 100,
         pencil: 100,
@@ -339,6 +547,7 @@
         opacityValueLabel.textContent = val + '%';
     }
 
+    // CRITICAL FIX: When Cursor is active, pointer-events = 'none' so user can click page buttons!
     function updatePointerEvents() {
         if (currentTool === 'cursor') {
             canvas.style.pointerEvents = 'none';
@@ -355,6 +564,7 @@
         redrawWb();
     });
 
+    // Tool Selector buttons
     const buttons = toolbar.querySelectorAll('.tb-btn[data-tool]');
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -366,6 +576,7 @@
         });
     });
 
+    // Color Selector
     const colorDots = toolbar.querySelectorAll('.tb-color-dot');
     colorDots.forEach(dot => {
         dot.addEventListener('click', () => {
@@ -387,11 +598,12 @@
         redrawScreen();
     });
 
+    // RENDER FUNCTION FOR DRAWINGS & SHAPES
     function drawObject(targetCtx, obj) {
         targetCtx.save();
         targetCtx.beginPath();
-        targetCtx.strokeStyle = obj.color || '#6d5a00';
-        targetCtx.fillStyle = obj.color || '#6d5a00';
+        targetCtx.strokeStyle = obj.color || '#ef4444';
+        targetCtx.fillStyle = obj.color || '#ef4444';
         targetCtx.lineWidth = obj.lineWidth || 4;
         targetCtx.lineCap = 'round';
         targetCtx.lineJoin = 'round';
@@ -432,6 +644,7 @@
         screenObjects.forEach(obj => drawObject(ctx, obj));
     }
 
+    // SCREEN ANNOTATION CANVAS DRAWING EVENTS
     canvas.addEventListener('mousedown', (e) => {
         if (currentTool === 'cursor') return;
 
@@ -444,6 +657,7 @@
         }
 
         if (currentTool === 'eraser') {
+            // Eraser removes object under click
             for (let i = screenObjects.length - 1; i >= 0; i--) {
                 const obj = screenObjects[i];
                 if (isHit(mx, my, obj, ctx)) {
@@ -469,6 +683,7 @@
         if (currentTool === 'pencil' || currentTool === 'highlighter') {
             activePoints.push({ x: mx, y: my });
             redrawScreen();
+            // Draw live stroke
             drawObject(ctx, {
                 type: currentTool,
                 points: activePoints,
@@ -519,6 +734,38 @@
         redrawScreen();
     });
 
+    // Touch Support for Screen Canvas
+    canvas.addEventListener('touchstart', (e) => {
+        if (currentTool === 'cursor') return;
+        if (e.touches.length > 1) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        canvas.dispatchEvent(new MouseEvent('mousedown', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (currentTool === 'cursor' || !isDrawing) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        canvas.dispatchEvent(new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', (e) => {
+        if (currentTool === 'cursor' || !isDrawing) return;
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        canvas.dispatchEvent(new MouseEvent('mouseup', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
     function isHit(px, py, obj, targetCtx) {
         if (obj.type === 'circle') {
             let dist = Math.sqrt(Math.pow(px - obj.x, 2) + Math.pow(py - obj.y, 2));
@@ -534,6 +781,7 @@
         return false;
     }
 
+    // KEYBOARD TEXT INPUT OVERLAY
     function createTextInput(x, y, isWhiteboard) {
         const existing = document.querySelector('.canvas-text-input');
         if (existing) existing.remove();
@@ -576,6 +824,7 @@
         input.addEventListener('blur', commitText);
     }
 
+    // WHITEBOARD MODAL ENGINE
     const wbCanvas = document.getElementById('wbCanvas');
     const wbCtx = wbCanvas.getContext('2d');
     let isWbDrawing = false;
@@ -690,6 +939,39 @@
         redrawWb();
     });
 
+    // Touch Support for Whiteboard Canvas
+    wbCanvas.addEventListener('touchstart', (e) => {
+        if (currentTool === 'cursor') return;
+        if (e.touches.length > 1) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        wbCanvas.dispatchEvent(new MouseEvent('mousedown', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
+    wbCanvas.addEventListener('touchmove', (e) => {
+        if (currentTool === 'cursor' || !isWbDrawing) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        wbCanvas.dispatchEvent(new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
+    wbCanvas.addEventListener('touchend', (e) => {
+        if (currentTool === 'cursor' || !isWbDrawing) return;
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        wbCanvas.dispatchEvent(new MouseEvent('mouseup', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        }));
+    }, { passive: false });
+
+    // Initial setup
     initCanvasDimensions();
     updatePointerEvents();
 })();
