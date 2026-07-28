@@ -67,30 +67,42 @@
 
         .tb-floating-bar {
             position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(0) scale(1);
+            top: 50%;
+            right: 16px;
+            left: auto;
+            bottom: auto;
+            transform: translateY(-50%);
             z-index: 9999;
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(200, 200, 200, 0.5);
-            border-radius: 9999px;
-            padding: 8px 16px;
+            border-radius: 24px;
+            padding: 12px 8px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
             transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
             user-select: none;
             opacity: 1;
             visibility: visible;
-            max-width: calc(100vw - 32px);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+
+        .tb-floating-bar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .tb-floating-bar::-webkit-scrollbar-thumb {
+            background: rgba(150,150,150,0.3);
+            border-radius: 10px;
         }
 
         .tb-floating-bar.tb-collapsed {
             opacity: 0;
-            transform: translateX(-50%) translateY(40px) scale(0.85);
+            transform: translateY(-50%) translateX(40px) scale(0.85);
             pointer-events: none !important;
             visibility: hidden;
         }
@@ -123,15 +135,16 @@
         .tb-btn .material-symbols-outlined { font-size: 22px; }
 
         .tb-divider {
-            width: 1px;
-            height: 24px;
-            background: rgba(150, 150, 150, 0.3);
-            margin: 0 4px;
+            width: 24px;
+            height: 1px;
+            background: rgba(150, 150, 150, 0.25);
+            margin: 4px 0;
             flex-shrink: 0;
         }
 
         .tb-color-picker {
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
@@ -166,26 +179,31 @@
 
         .tb-opacity-wrap {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             background: rgba(0,0,0,0.04);
-            padding: 4px 10px;
-            border-radius: 9999px;
+            padding: 6px 4px;
+            border-radius: 12px;
             flex-shrink: 0;
         }
 
         .tb-opacity-slider {
-            width: 70px;
-            height: 4px;
+            width: 4px !important;
+            height: 50px;
             accent-color: #2563eb;
             cursor: pointer;
+            appearance: slider-vertical;
+            -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;
         }
 
         .tb-opacity-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: #4b5563;
-            min-width: 32px;
+            min-width: 28px;
+            text-align: center;
         }
 
         #whiteboardModal {
@@ -271,6 +289,55 @@
             min-width: 160px;
         }
 
+        /* Spotlight / Focus Tool */
+        .spotlight-blur {
+            position: fixed;
+            inset: 0;
+            z-index: 9996;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: transparent;
+            pointer-events: none;
+        }
+        .spotlight-hole {
+            position: fixed;
+            z-index: 9997;
+            background: transparent;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            animation: spotlightPulse 2s ease-in-out infinite;
+        }
+        @keyframes spotlightPulse {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.7); box-shadow: 0 0 0 9999px rgba(0,0,0,0.4); }
+            50% { border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); }
+        }
+        .spotlight-close {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9999;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.2s;
+        }
+        .spotlight-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
         /* Mobile Adjustments */
         @media (max-width: 768px) {
             .tb-toggle-btn {
@@ -285,15 +352,24 @@
             }
 
             .tb-floating-bar {
-                bottom: 76px;
-                max-width: calc(100vw - 20px);
-                padding: 6px 10px;
+                top: 50%;
+                right: 8px;
+                left: auto;
+                bottom: auto;
+                transform: translateY(-50%);
+                position: fixed;
+                max-height: calc(100vh - 80px);
+                padding: 8px 6px;
                 gap: 4px;
-                border-radius: 24px;
-                overflow-x: auto;
-                overflow-y: hidden;
+                border-radius: 18px;
+                overflow-y: auto;
+                overflow-x: hidden;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
+            }
+
+            .tb-floating-bar.tb-collapsed {
+                transform: translateY(-50%) translateX(40px) scale(0.85);
             }
 
             .tb-floating-bar::-webkit-scrollbar {
@@ -304,6 +380,7 @@
                 width: 36px;
                 height: 36px;
                 min-width: 36px;
+                min-height: 36px;
             }
 
             .tb-btn .material-symbols-outlined {
@@ -311,11 +388,13 @@
             }
 
             .tb-divider {
-                height: 20px;
-                margin: 0 2px;
+                width: 18px;
+                height: 1px;
+                margin: 2px 0;
             }
 
             .tb-color-picker {
+                flex-direction: column;
                 gap: 4px;
             }
 
@@ -330,17 +409,18 @@
             }
 
             .tb-opacity-wrap {
-                padding: 2px 6px;
-                gap: 4px;
+                padding: 3px 2px;
+                gap: 2px;
             }
 
             .tb-opacity-slider {
-                width: 46px;
+                width: 3px !important;
+                height: 36px;
             }
 
             .tb-opacity-label {
-                font-size: 10px;
-                min-width: 26px;
+                font-size: 9px;
+                min-width: 24px;
             }
 
             .tb-tooltip {
@@ -377,8 +457,8 @@
     const toggleBtn = document.createElement('button');
     toggleBtn.id = 'tbToggleBtn';
     toggleBtn.className = 'tb-toggle-btn';
-    toggleBtn.title = 'Mostrar / Ocultar Barra de Herramientas';
-    toggleBtn.setAttribute('aria-label', 'Mostrar / Ocultar Barra de Herramientas');
+    toggleBtn.title = 'Show / Hide Toolbar';
+    toggleBtn.setAttribute('aria-label', 'Show / Hide Toolbar');
     toggleBtn.innerHTML = `<span class="material-symbols-outlined">close</span>`;
     document.body.appendChild(toggleBtn);
 
@@ -387,42 +467,46 @@
     toolbar.className = 'tb-floating-bar';
     toolbar.id = 'interactiveToolbar';
     toolbar.innerHTML = `
-        <button class="tb-btn active" data-tool="cursor" title="Navegar Página (Permite clics en la web)">
+        <button class="tb-btn active" data-tool="cursor" title="Browse Page (Allows clicks on the page)">
             <span class="material-symbols-outlined">near_me</span>
-            <span class="tb-tooltip">Navegar Página (Cursor)</span>
+            <span class="tb-tooltip">Browse Page (Cursor)</span>
         </button>
         <div class="tb-divider"></div>
-        <button class="tb-btn" data-tool="pencil" title="Lápiz Libre">
+        <button class="tb-btn" data-tool="pencil" title="Free Pencil">
             <span class="material-symbols-outlined">edit</span>
-            <span class="tb-tooltip">Lápiz Libre</span>
+            <span class="tb-tooltip">Free Pencil</span>
         </button>
-        <button class="tb-btn" data-tool="highlighter" title="Resaltador Transparente">
+        <button class="tb-btn" data-tool="highlighter" title="Highlighter Transparente">
             <span class="material-symbols-outlined">ink_highlighter</span>
-            <span class="tb-tooltip">Resaltador</span>
+            <span class="tb-tooltip">Highlighter</span>
         </button>
-        <button class="tb-btn" data-tool="circle" title="Círculo">
+        <button class="tb-btn" data-tool="circle" title="Circle">
             <span class="material-symbols-outlined">panorama_fish_eye</span>
-            <span class="tb-tooltip">Círculo</span>
+            <span class="tb-tooltip">Circle</span>
         </button>
-        <button class="tb-btn" data-tool="square" title="Cuadrado">
+        <button class="tb-btn" data-tool="square" title="Square">
             <span class="material-symbols-outlined">crop_square</span>
-            <span class="tb-tooltip">Cuadrado</span>
+            <span class="tb-tooltip">Square</span>
         </button>
-        <button class="tb-btn" data-tool="line" title="Regla / Línea">
+        <button class="tb-btn" data-tool="line" title="Ruler / Line">
             <span class="material-symbols-outlined">horizontal_rule</span>
-            <span class="tb-tooltip">Regla / Línea</span>
+            <span class="tb-tooltip">Ruler / Line</span>
+        </button>
+        <button class="tb-btn" data-tool="spotlight" title="Spotlight - Select Area to Focus">
+            <span class="material-symbols-outlined">center_focus_strong</span>
+            <span class="tb-tooltip">Spotlight</span>
         </button>
         <button class="tb-btn" data-tool="text" title="Escribir Texto">
             <span class="material-symbols-outlined">title</span>
             <span class="tb-tooltip">Escribir Texto</span>
         </button>
-        <button class="tb-btn" data-tool="eraser" title="Borrador">
+        <button class="tb-btn" data-tool="eraser" title="Eraser">
             <span class="material-symbols-outlined">ink_eraser</span>
-            <span class="tb-tooltip">Borrador</span>
+            <span class="tb-tooltip">Eraser</span>
         </button>
-        <button class="tb-btn" id="tbClear" title="Limpiar Anotaciones">
+        <button class="tb-btn" id="tbClear" title="Clear Annotations">
             <span class="material-symbols-outlined">delete</span>
-            <span class="tb-tooltip">Limpiar Pantalla</span>
+            <span class="tb-tooltip">Clear Screen</span>
         </button>
         <div class="tb-divider"></div>
         <div class="tb-color-picker">
@@ -431,23 +515,23 @@
             <div class="tb-color-dot" data-color="#22c55e" style="background:#22c55e" title="Verde"></div>
             <div class="tb-color-dot" data-color="#eab308" style="background:#eab308" title="Amarillo"></div>
             <div class="tb-color-dot" data-color="#0f172a" style="background:#0f172a" title="Negro"></div>
-            <input type="color" id="tbCustomColor" value="#ef4444" title="Color Personalizado">
+            <input type="color" id="tbCustomColor" value="#ef4444" title="Custom Color">
         </div>
         <div class="tb-divider"></div>
-        <div class="tb-opacity-wrap" title="Transparencia de la herramienta activa">
+        <div class="tb-opacity-wrap" title="Active tool opacity">
             <span class="material-symbols-outlined text-slate-500 text-sm">opacity</span>
             <input type="range" id="tbOpacitySlider" class="tb-opacity-slider" min="10" max="100" value="100">
             <span id="tbOpacityValue" class="tb-opacity-label">100%</span>
         </div>
         <div class="tb-divider"></div>
-        <button class="tb-btn" id="tbWhiteboardBtn" title="Abrir Pizarra Interactiva" style="background:#2563eb;color:#fff">
+        <button class="tb-btn" id="tbWhiteboardBtn" title="Open Interactive Whiteboard" style="background:#2563eb;color:#fff">
             <span class="material-symbols-outlined">dashboard</span>
-            <span class="tb-tooltip">Pizarra Interactiva</span>
+            <span class="tb-tooltip">Interactive Whiteboard</span>
         </button>
         <div class="tb-divider"></div>
-        <button class="tb-btn" id="tbCollapseBtn" title="Ocultar Barra">
+        <button class="tb-btn" id="tbCollapseBtn" title="Hide Toolbar">
             <span class="material-symbols-outlined">expand_more</span>
-            <span class="tb-tooltip">Ocultar Barra</span>
+            <span class="tb-tooltip">Hide Toolbar</span>
         </button>
     `;
     document.body.appendChild(toolbar);
@@ -461,12 +545,12 @@
             toolbar.classList.add('tb-collapsed');
             toggleBtn.classList.add('collapsed');
             toggleBtn.innerHTML = `<span class="material-symbols-outlined">tune</span>`;
-            toggleBtn.title = "Expandir Barra de Herramientas";
+            toggleBtn.title = "Expand Toolbar";
         } else {
             toolbar.classList.remove('tb-collapsed');
             toggleBtn.classList.remove('collapsed');
             toggleBtn.innerHTML = `<span class="material-symbols-outlined">close</span>`;
-            toggleBtn.title = "Ocultar Barra de Herramientas";
+            toggleBtn.title = "Hide Toolbar";
         }
     }
 
@@ -489,11 +573,11 @@
             <div class="wb-header">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-blue-600 text-2xl">draw</span>
-                    <h3 class="font-bold text-xl text-slate-800 font-['Manrope']">Pizarra Interactiva — Ejemplos, Tips & Texto</h3>
+                    <h3 class="font-bold text-xl text-slate-800 font-['Manrope']">Interactive Whiteboard — Examples, Tips & Text</h3>
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="wbClearBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">delete</span> Limpiar Pizarra
+                        <span class="material-symbols-outlined text-sm">delete</span> Clear Whiteboard
                     </button>
                     <button id="wbCloseBtn" class="p-2 hover:bg-slate-200 text-slate-600 rounded-full transition-colors">
                         <span class="material-symbols-outlined">close</span>
@@ -534,6 +618,7 @@
         circle: 80,
         square: 80,
         line: 100,
+        spotlight: 100,
         text: 100,
         eraser: 100
     };
@@ -551,10 +636,78 @@
     function updatePointerEvents() {
         if (currentTool === 'cursor') {
             canvas.style.pointerEvents = 'none';
+        } else if (currentTool === 'spotlight') {
+            canvas.style.pointerEvents = spotlightActive ? 'none' : 'auto';
         } else {
             canvas.style.pointerEvents = 'auto';
         }
     }
+
+    // Spotlight state
+    let spotlightActive = false;
+    let spotlightBlurEl = null;
+    let spotlightHoleEl = null;
+    let spotlightCloseEl = null;
+
+    function removeSpotlight() {
+        if (spotlightBlurEl) { spotlightBlurEl.remove(); spotlightBlurEl = null; }
+        if (spotlightHoleEl) { spotlightHoleEl.remove(); spotlightHoleEl = null; }
+        if (spotlightCloseEl) { spotlightCloseEl.remove(); spotlightCloseEl = null; }
+        spotlightActive = false;
+        updatePointerEvents();
+    }
+
+    function createSpotlight(left, top, width, height) {
+        removeSpotlight();
+
+        // Blur layer: full viewport with clip-path hole for the spotlight area
+        const blurEl = document.createElement('div');
+        blurEl.className = 'spotlight-blur';
+        blurEl.style.clipPath = `polygon(
+            0 0, 100vw 0, 100vw 100vh, 0 100vh, 0 0,
+            ${left}px ${top}px, ${left}px ${top + height}px,
+            ${left + width}px ${top + height}px, ${left + width}px ${top}px,
+            ${left}px ${top}px
+        )`;
+        blurEl.style.webkitClipPath = blurEl.style.clipPath;
+        document.body.appendChild(blurEl);
+        spotlightBlurEl = blurEl;
+
+        // Dark hole: transparent div at spotlight position with massive box-shadow
+        const holeEl = document.createElement('div');
+        holeEl.className = 'spotlight-hole';
+        holeEl.style.top = top + 'px';
+        holeEl.style.left = left + 'px';
+        holeEl.style.width = width + 'px';
+        holeEl.style.height = height + 'px';
+        document.body.appendChild(holeEl);
+        spotlightHoleEl = holeEl;
+
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'spotlight-close';
+        closeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:22px">close</span>';
+        closeBtn.title = 'Close Spotlight';
+        closeBtn.setAttribute('aria-label', 'Close Spotlight');
+        closeBtn.addEventListener('click', removeSpotlight);
+        document.body.appendChild(closeBtn);
+        spotlightCloseEl = closeBtn;
+
+        spotlightActive = true;
+        updatePointerEvents();
+    }
+
+    // Dismiss spotlight with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && spotlightActive) {
+            removeSpotlight();
+        }
+    });
+
+    // Dismiss spotlight on window resize (positions would shift)
+    window.addEventListener('resize', () => {
+        if (spotlightActive) removeSpotlight();
+    });
 
     opacitySlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
@@ -657,7 +810,6 @@
         }
 
         if (currentTool === 'eraser') {
-            // Eraser removes object under click
             for (let i = screenObjects.length - 1; i >= 0; i--) {
                 const obj = screenObjects[i];
                 if (isHit(mx, my, obj, ctx)) {
@@ -667,6 +819,14 @@
             }
             redrawScreen();
             return;
+        }
+
+        // Spotlight: dismiss existing overlay on click, don't start new drawing
+        if (currentTool === 'spotlight') {
+            if (spotlightActive) {
+                removeSpotlight();
+                return;
+            }
         }
 
         isDrawing = true;
@@ -701,6 +861,16 @@
                 drawObject(ctx, { type: 'square', x: startX, y: startY, w: mx - startX, h: my - startY, color: currentColor, opacity: op, lineWidth: currentLineWidth });
             } else if (currentTool === 'line') {
                 drawObject(ctx, { type: 'line', x1: startX, y1: startY, x2: mx, y2: my, color: currentColor, opacity: op, lineWidth: currentLineWidth });
+            } else if (currentTool === 'spotlight') {
+                const alpha = 0.3;
+                ctx.save();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([6, 4]);
+                ctx.strokeRect(startX, startY, mx - startX, my - startY);
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.fillRect(startX, startY, mx - startX, my - startY);
+                ctx.restore();
             }
         }
     });
@@ -729,6 +899,14 @@
             if (Math.abs(mx - startX) > 2) screenObjects.push({ type: 'square', x: startX, y: startY, w: mx - startX, h: my - startY, color: currentColor, opacity: op, lineWidth: currentLineWidth });
         } else if (currentTool === 'line') {
             if (Math.abs(mx - startX) > 2 || Math.abs(my - startY) > 2) screenObjects.push({ type: 'line', x1: startX, y1: startY, x2: mx, y2: my, color: currentColor, opacity: op, lineWidth: currentLineWidth });
+        } else if (currentTool === 'spotlight') {
+            const w = Math.abs(mx - startX);
+            const h = Math.abs(my - startY);
+            if (w > 10 && h > 10) {
+                const l = Math.min(startX, mx);
+                const t = Math.min(startY, my);
+                createSpotlight(l, t, w, h);
+            }
         }
 
         redrawScreen();
@@ -789,7 +967,7 @@
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'canvas-text-input';
-        input.placeholder = 'Escribe aquí...';
+        input.placeholder = 'Type here...';
         input.style.left = x + 'px';
         input.style.top = y + 'px';
         input.style.color = currentColor;
@@ -871,7 +1049,7 @@
             return;
         }
 
-        if (currentTool === 'cursor') return;
+        if (currentTool === 'cursor' || currentTool === 'spotlight') return;
 
         isWbDrawing = true;
         wbStartX = mx;
@@ -941,7 +1119,7 @@
 
     // Touch Support for Whiteboard Canvas
     wbCanvas.addEventListener('touchstart', (e) => {
-        if (currentTool === 'cursor') return;
+        if (currentTool === 'cursor' || currentTool === 'spotlight') return;
         if (e.touches.length > 1) return;
         e.preventDefault();
         const touch = e.touches[0];

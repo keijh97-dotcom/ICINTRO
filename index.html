@@ -521,6 +521,16 @@
         html.dark header {
             background: rgba(20,19,12,0.85) !important;
         }
+
+        /* Sidebar Collapse */
+        #sidebarBlock {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sidebarBlock.sidebar-collapsed {
+            max-width: 52px;
+            min-width: 52px;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -570,16 +580,27 @@
             <!-- Sidebar -->
             <aside id="sidebarBlock" class="hidden lg:block lg:col-span-3 space-y-4">
                 <div class="sticky top-32">
-                    <h3 class="hidden lg:block font-headline font-bold text-lg mb-6 border-b border-outline-variant/15 pb-4">Curriculum
-                        Nodes</h3>
-                    <div class="space-y-2" id="sidebarNav">
-                        <!-- Rendered by JS -->
+                    <!-- Collapsed expand button -->
+                    <button onclick="toggleSidebar()" id="sidebarExpandTab" class="hidden w-full p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container-highest transition-all" title="Expand Sidebar">
+                        <span class="material-symbols-outlined block mx-auto">chevron_right</span>
+                    </button>
+                    <!-- Expanded content -->
+                    <div class="sidebar-content">
+                        <div class="flex items-center justify-between mb-6 border-b border-outline-variant/15 pb-4">
+                            <h3 class="font-headline font-bold text-lg text-primary">Curriculum Nodes</h3>
+                            <button onclick="toggleSidebar()" class="sidebar-toggle-btn w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container-lowest hover:bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant transition-all" title="Collapse Sidebar">
+                                <span class="material-symbols-outlined text-lg">chevron_left</span>
+                            </button>
+                        </div>
+                        <div class="space-y-2" id="sidebarNav">
+                            <!-- Rendered by JS -->
+                        </div>
                     </div>
                 </div>
             </aside>
 
             <!-- Main Content Area -->
-            <div class="lg:col-span-9">
+            <div class="lg:col-span-9 main-content-col">
                 <div id="heroSection"></div>
                 <div id="tabsBar" class="mb-8"></div>
                 <div id="contentArea" class="animate-[fadeIn_0.4s_ease-out]">
@@ -607,32 +628,32 @@
     </footer>
 
     <script>
-        const TABS_GRAMMAR = ["📐 Grammar", "✏️ Exercises", "📖 Reading", "💬 Conversation"];
+        const TABS = ["Discover", "Rules", "Practice", "Conversation", "Production"];
         const TAB_VOCAB = "Vocabulary";
         const TABS_PC = ["Quiz", "Reading", "Speaking"];
 
         const UNITS = [
-            { id: 1, title: "It's nice to meet you.", g1: "Verb Be", g2: "Possessives" },
-            { id: 2, title: "What's this?", g1: "Articles", g2: "Prepositions" },
-            { id: 3, title: "Where are you from?", g1: "Verb Be — Affirmative", g2: "Verb Be — Negative & Questions" },
-            { id: 4, title: "Whose jeans are these?", g1: "Possessives", g2: "Present Continuous" },
-            { id: 5, title: "What are you doing?", g1: "Present Continuous", g2: "Time Clauses" },
-            { id: 6, title: "My sister works downtown.", g1: "Simple Present - Statements", g2: "Simple Present - Questions" },
-            { id: 7, title: "Does it have a view?", g1: "There is/There are", g2: "Simple Present Short Answers" },
-            { id: 8, title: "What do you do?", g1: "Jobs", g2: "Adjective Placement" },
-            { id: 9, title: "Do we need any eggs?", g1: "Count/Noncount Nouns", g2: "Some and Any" },
-            { id: 10, title: "What sports do you play?", g1: "Can for Ability", g2: "Sports Vocabulary" },
-            { id: 11, title: "What are you going to do?", g1: "Be Going To", g2: "Future Time Expressions" },
-            { id: 12, title: "What's the matter?", g1: "Have/Feel", g2: "Imperatives" },
-            { id: 13, title: "You can't miss it.", g1: "Prepositions of Place", g2: "Directions" },
-            { id: 14, title: "Did you have fun?", g1: "Simple Past Statements", g2: "Simple Past Questions" },
-            { id: 15, title: "Where were you born?", g1: "Past of Be (was/were)", g2: "Wh- Questions with Be" },
-            { id: 16, title: "Can she call you later?", g1: "Object Pronouns", g2: "Scheduling" }
+            { id: 1, title: "It's nice to meet you.", lessons: ["Verb Be", "Possessives: My, Your, His, Her"], badge: "Verb Be & Possessives" },
+            { id: 2, title: "What's this?", lessons: ["Articles: A, An, The", "Prepositions: In, On, At"], badge: "Articles & Prepositions" },
+            { id: 3, title: "Where are you from?", lessons: ["Verb Be - Affirmative", "Verb Be - Negative & Questions"], badge: "Verb Be Forms" },
+            { id: 4, title: "Whose jeans are these?", lessons: ["Possessive 's", "Present Continuous"], badge: "Possessives & Present Continuous" },
+            { id: 5, title: "What are you doing?", lessons: ["Present Continuous - Now", "Time Clauses with When"], badge: "Actions & Time" },
+            { id: 6, title: "My sister works downtown.", lessons: ["Simple Present - Statements", "Simple Present - Questions"], badge: "Simple Present" },
+            { id: 7, title: "Does it have a view?", lessons: ["There is / There are", "Simple Present Short Answers"], badge: "There is/are & Short Answers" },
+            { id: 8, title: "What do you do?", lessons: ["Jobs and Occupations", "Adjective Placement"], badge: "Jobs & Adjectives" },
+            { id: 9, title: "Do we need any eggs?", lessons: ["Count and Noncount Nouns", "Some and Any"], badge: "Count/Noncount & Some/Any" },
+            { id: 10, title: "What sports do you play?", lessons: ["Can for Ability", "Sports and Activities"], badge: "Can & Sports" },
+            { id: 11, title: "What are you going to do?", lessons: ["Be Going To", "Future Time Expressions"], badge: "Future Plans" },
+            { id: 12, title: "What's the matter?", lessons: ["Have and Feel", "Imperatives"], badge: "Health & Commands" },
+            { id: 13, title: "You can't miss it.", lessons: ["Prepositions of Place", "Giving Directions"], badge: "Place & Directions" },
+            { id: 14, title: "Did you have fun?", lessons: ["Simple Past Statements", "Simple Past Questions"], badge: "Simple Past" },
+            { id: 15, title: "Where were you born?", lessons: ["Past of Be: Was / Were", "Wh- Questions with Be"], badge: "Past of Be" },
+            { id: 16, title: "Can she call you later?", lessons: ["Object Pronouns", "Making Plans and Scheduling"], badge: "Pronouns & Plans" }
         ];
 
         let currentType = 'overview'; // 'overview', 'unit', or 'pc'
         let currentUnit = 1;
-        let currentGrammar = 1;
+        let currentLesson = 1;
         let currentTab = 0;
         let isVocabView = false;
         let currentPC = 0;
@@ -642,7 +663,11 @@
             loadProgress();
             renderTopNav();
             if (currentType !== 'overview') {
-                selectOverviewUnit(currentUnit);
+                showUnitLayout();
+                buildSidebar();
+                renderHero();
+                renderTabs();
+                renderContent();
             } else {
                 showOverview();
             }
@@ -691,7 +716,7 @@
                 <div class="group bg-surface-container-lowest p-8 rounded-xl hover:translate-y-[-4px] transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-md cursor-pointer" onclick="selectOverviewUnit(${u.id})">
                     <span class="font-headline font-black text-4xl text-surface-container-highest group-hover:text-primary-fixed transition-colors">${u.id < 10 ? '0' + u.id : u.id}</span>
                     <h3 class="font-headline font-bold text-xl mt-4 mb-2 truncate">${u.title}</h3>
-                    <p class="text-on-surface-variant text-sm mb-6 line-clamp-2">${u.g1} • ${u.g2}</p>
+                    <p class="text-on-surface-variant text-sm mb-6 line-clamp-2">${u.lessons[0]} • ${u.lessons[1]}</p>
                     <span class="text-primary font-bold text-sm inline-flex items-center gap-2 group-hover:gap-4 transition-all">Start Unit <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
                 </div>`;
 
@@ -736,9 +761,10 @@
             let html = '';
 
             UNITS.forEach(u => {
-                const isActiveUnit = currentType === 'unit' && currentUnit === u.id;
-                const btnClass = isActiveUnit ? "bg-primary-fixed text-on-primary-fixed shadow-sm" : "hover:bg-surface-container-low text-on-surface-variant";
-                const chevronRotate = isActiveUnit ? "rotate-180" : "";
+                const isUnitActive = currentType === 'unit' && currentUnit === u.id;
+                const isActiveUnit = isUnitActive && !isVocabView;
+                const btnClass = isUnitActive ? "bg-primary-fixed text-on-primary-fixed shadow-sm" : "hover:bg-surface-container-low text-on-surface-variant";
+                const chevronRotate = isUnitActive ? "rotate-180" : "";
 
                 html += `
                 <div class="space-y-1 mb-2">
@@ -749,11 +775,14 @@
                         </span>
                         <span class="material-symbols-outlined text-sm transform transition-transform duration-300 ${chevronRotate}">expand_more</span>
                     </button>
-                    <div class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: ${isActiveUnit ? '200px' : '0'};">
+                    <div class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: ${isUnitActive ? '200px' : '0'};">
                         <div class="pl-12 pr-4 py-2 space-y-1 border-l-2 border-surface-variant ml-6 mb-2 mt-1">
-                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && currentGrammar === 1 && !isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectGrammar(${u.id},1)">G1: ${u.g1}</button>
-                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && currentGrammar === 2 && !isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectGrammar(${u.id},2)">G2: ${u.g2}</button>
-                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isActiveUnit && isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectVocab(${u.id})">Vocabulary</button>
+                            ${u.lessons.map((l, i) => {
+                                const lessonNum = i + 1;
+                                const activeLesson = isActiveUnit && currentLesson === lessonNum;
+                                return `<button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-all ${activeLesson ? 'bg-primary text-white font-bold' : 'text-on-surface-variant hover:text-primary'}" onclick="switchLesson(${lessonNum})">${lessonNum}. ${l}</button>`;
+                            }).join('')}
+                            <button class="w-full text-left py-2 px-3 rounded-lg text-sm transition-colors ${(isUnitActive && isVocabView) ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'} " onclick="selectVocab(${u.id})">Vocabulary</button>
                         </div>
                     </div>
                 </div>`;
@@ -776,9 +805,64 @@
         function toggleUnit(id) {
             const wasActive = (currentType === 'unit' && currentUnit === id);
             if (!wasActive) {
-                selectGrammar(id, 1);
+                switchUnit(id, 1);
+            }
+        }
+
+        function switchUnit(id, lesson) {
+            currentType = 'unit';
+            currentUnit = id;
+            currentLesson = lesson || 1;
+            currentTab = 0;
+            isVocabView = false;
+            buildSidebar();
+            renderHero();
+            renderTabs();
+            renderContent();
+            closeMobileSidebar();
+        }
+
+        function switchLesson(l) {
+            currentLesson = l;
+            currentTab = 0;
+            isVocabView = false;
+            buildSidebar();
+            renderHero();
+            renderTabs();
+            renderContent();
+        }
+
+        let sidebarCollapsed = false;
+
+        function toggleSidebar() {
+            sidebarCollapsed = !sidebarCollapsed;
+            const sidebar = document.getElementById('sidebarBlock');
+            const mainCol = document.querySelector('.main-content-col');
+            const content = sidebar.querySelector('.sidebar-content');
+            const expandTab = document.getElementById('sidebarExpandTab');
+            const toggleBtn = sidebar.querySelector('.sidebar-toggle-btn');
+            if (sidebarCollapsed) {
+                sidebar.classList.add('sidebar-collapsed');
+                sidebar.classList.remove('lg:col-span-3');
+                sidebar.classList.add('lg:col-span-1');
+                if (content) content.style.display = 'none';
+                if (expandTab) expandTab.style.display = 'block';
+                if (mainCol) {
+                    mainCol.classList.remove('lg:col-span-9');
+                    mainCol.classList.add('lg:col-span-11');
+                }
+                if (toggleBtn) toggleBtn.title = 'Expand Sidebar';
             } else {
-                // If it is already active clicking it again just stays there?
+                sidebar.classList.remove('sidebar-collapsed');
+                sidebar.classList.remove('lg:col-span-1');
+                sidebar.classList.add('lg:col-span-3');
+                if (content) content.style.display = '';
+                if (expandTab) expandTab.style.display = 'none';
+                if (mainCol) {
+                    mainCol.classList.remove('lg:col-span-11');
+                    mainCol.classList.add('lg:col-span-9');
+                }
+                if (toggleBtn) toggleBtn.title = 'Collapse Sidebar';
             }
         }
 
@@ -789,17 +873,7 @@
         }
 
         function selectGrammar(unitId, grammarNum) {
-            currentType = 'unit';
-            currentUnit = unitId;
-            currentGrammar = grammarNum;
-            currentTab = 0;
-            isVocabView = false;
-
-            buildSidebar();
-            renderHero();
-            renderTabs();
-            renderContent();
-            closeMobileSidebar();
+            switchUnit(unitId, grammarNum);
         }
 
         function selectVocab(unitId) {
@@ -831,13 +905,18 @@
             const hero = document.getElementById('heroSection');
             if (currentType === 'unit') {
                 const u = UNITS.find(x => x.id === currentUnit);
-                let tag = isVocabView ? 'Vocabulary' : (currentGrammar === 1 ? u.g1 : u.g2);
+                let tag = isVocabView ? 'Vocabulary' : u.lessons[currentLesson - 1];
                 hero.innerHTML = `
                 <section class="grid grid-cols-12 gap-8 mb-8 items-end">
                     <div class="col-span-12 md:col-span-10">
-                        <span class="font-label uppercase tracking-widest text-primary font-bold text-xs mb-4 block">Unit ${u.id}</span>
+                        <span class="font-label uppercase tracking-widest text-primary font-bold text-xs mb-4 block">Unit ${u.id} · Lesson ${currentLesson}</span>
                         <h1 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface leading-[0.9] mb-4 break-words hyphens-auto">${u.title}</h1>
                         <p class="font-body text-xl text-primary max-w-xl leading-relaxed italic border-l-4 border-primary-fixed pl-4">${tag}</p>
+                        ${!isVocabView ? `
+                        <div class="flex gap-3 mt-4">
+                            <button class="px-4 py-2 rounded-xl font-bold text-sm transition-all ${currentLesson === 1 ? 'bg-primary text-white' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchLesson(1)">${u.lessons[0]}</button>
+                            <button class="px-4 py-2 rounded-xl font-bold text-sm transition-all ${currentLesson === 2 ? 'bg-primary text-white' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchLesson(2)">${u.lessons[1]}</button>
+                        </div>` : ''}
                     </div>
                 </section>`;
             } else if (currentType === 'pc') {
@@ -862,7 +941,7 @@
             } else if (isVocabView) {
                 html += `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold bg-primary-fixed text-on-primary-fixed shadow-md">Vocabulary Grid</button>`;
             } else {
-                html += TABS_GRAMMAR.map((t, i) => `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold transition-all ${i === currentTab ? 'bg-primary-fixed text-on-primary-fixed shadow-md' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchTab(${i})">${t}</button>`).join('');
+                html += TABS.map((t, i) => `<button class="whitespace-nowrap flex-shrink-0 px-6 py-2 rounded-xl font-bold transition-all ${i === currentTab ? 'bg-primary-fixed text-on-primary-fixed shadow-md' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-highest border border-outline-variant/20'}" onclick="switchTab(${i})">${t}</button>`).join('');
             }
             html += '</div>';
             bar.innerHTML = html;
@@ -890,17 +969,17 @@
             } else if (isVocabView) {
                 data = window['unit' + currentUnit + 'vocab'];
             } else {
-                data = window['unit' + currentUnit + 'g' + currentGrammar];
+                data = window['lesson' + currentUnit + '_' + currentLesson];
             }
 
             if (data && data[currentTab] !== undefined) {
                 area.innerHTML = data[currentTab];
             } else {
-                let sectionLabel = currentType === 'pc' ? TABS_PC[currentTab] : (isVocabView ? 'Vocabulary' : TABS_GRAMMAR[currentTab]);
+                let sectionLabel = currentType === 'pc' ? TABS_PC[currentTab] : (isVocabView ? 'Vocabulary' : TABS[currentTab]);
                 area.innerHTML = `<div class="card bg-surface-container-highest border-dashed border-2 border-outline-variant/50 flex flex-col items-center justify-center p-16 text-center">
                     <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-4">construction</span>
-                    <h3 class="font-headline font-bold text-2xl">🚧 ${sectionLabel} - In Production</h3>
-                    <p class="font-body text-on-surface-variant mt-2 max-w-md">This content module is currently being finalized for the Interchange Intro curriculum.</p>
+                    <h3 class="font-headline font-bold text-2xl">${sectionLabel} - In Development</h3>
+                    <p class="font-body text-on-surface-variant mt-2 max-w-md">This section for Unit ${currentUnit}, Lesson ${currentLesson} is under final review.</p>
                 </div>`;
             }
 
@@ -1011,7 +1090,7 @@
 
         // ── Progress Saving ────────────────────────────────
         function saveProgress() {
-            const state = { unit: currentUnit, grammar: currentGrammar, type: currentType, tab: currentTab, isVocab: isVocabView };
+            const state = { unit: currentUnit, lesson: currentLesson, type: currentType, tab: currentTab, isVocab: isVocabView };
             localStorage.setItem('icintro_progress', JSON.stringify(state));
         }
 
@@ -1021,7 +1100,7 @@
                 if (!saved) return;
                 const s = JSON.parse(saved);
                 if (s.unit) currentUnit = s.unit;
-                if (s.grammar) currentGrammar = s.grammar;
+                if (s.lesson) currentLesson = s.lesson;
                 if (s.type) currentType = s.type;
                 if (s.tab !== undefined) currentTab = s.tab;
                 if (s.isVocab !== undefined) isVocabView = s.isVocab;
@@ -1029,66 +1108,66 @@
         }
     </script>
 
-    <!-- Unit 1 -->
-    <script src="units/u1g1.js"></script>
-    <script src="units/u1g2.js"></script>
-    <script src="units/u1vocab.js"></script>
-    <!-- Unit 2 -->
-    <script src="units/u2g1.js"></script>
-    <script src="units/u2g2.js"></script>
-    <script src="units/u2vocab.js"></script>
-    <!-- Progress Check 1 (Units 1-2) -->
-    <script src="units/pc1.js"></script>
+    <!-- Lesson files (CELTA 5-tab system) -->
+    <script src="units/lesson1_1.js"></script>
+    <script src="units/lesson1_2.js"></script>
+    <script src="units/lesson2_1.js"></script>
+    <script src="units/lesson2_2.js"></script>
+    <script src="units/lesson3_1.js"></script>
+    <script src="units/lesson3_2.js"></script>
+    <script src="units/lesson4_1.js"></script>
+    <script src="units/lesson4_2.js"></script>
+    <script src="units/lesson5_1.js"></script>
+    <script src="units/lesson5_2.js"></script>
+    <script src="units/lesson6_1.js"></script>
+    <script src="units/lesson6_2.js"></script>
+    <script src="units/lesson7_1.js"></script>
+    <script src="units/lesson7_2.js"></script>
+    <script src="units/lesson8_1.js"></script>
+    <script src="units/lesson8_2.js"></script>
+    <script src="units/lesson9_1.js"></script>
+    <script src="units/lesson9_2.js"></script>
+    <script src="units/lesson10_1.js"></script>
+    <script src="units/lesson10_2.js"></script>
+    <script src="units/lesson11_1.js"></script>
+    <script src="units/lesson11_2.js"></script>
+    <script src="units/lesson12_1.js"></script>
+    <script src="units/lesson12_2.js"></script>
+    <script src="units/lesson13_1.js"></script>
+    <script src="units/lesson13_2.js"></script>
+    <script src="units/lesson14_1.js"></script>
+    <script src="units/lesson14_2.js"></script>
+    <script src="units/lesson15_1.js"></script>
+    <script src="units/lesson15_2.js"></script>
+    <script src="units/lesson16_1.js"></script>
+    <script src="units/lesson16_2.js"></script>
 
-    <!-- (Include all other units as requested by standard build) -->
-    <script src="units/u3g1.js"></script>
-    <script src="units/u3g2.js"></script>
+    <!-- Vocabulary files -->
+    <script src="units/u1vocab.js"></script>
+    <script src="units/u2vocab.js"></script>
     <script src="units/u3vocab.js"></script>
-    <script src="units/u4g1.js"></script>
-    <script src="units/u4g2.js"></script>
     <script src="units/u4vocab.js"></script>
-    <script src="units/pc2.js"></script>
-    <script src="units/u5g1.js"></script>
-    <script src="units/u5g2.js"></script>
     <script src="units/u5vocab.js"></script>
-    <script src="units/u6g1.js"></script>
-    <script src="units/u6g2.js"></script>
     <script src="units/u6vocab.js"></script>
-    <script src="units/pc3.js"></script>
-    <script src="units/u7g1.js"></script>
-    <script src="units/u7g2.js"></script>
     <script src="units/u7vocab.js"></script>
-    <script src="units/u8g1.js"></script>
-    <script src="units/u8g2.js"></script>
     <script src="units/u8vocab.js"></script>
-    <script src="units/pc4.js"></script>
-    <script src="units/u9g1.js"></script>
-    <script src="units/u9g2.js"></script>
     <script src="units/u9vocab.js"></script>
-    <script src="units/u10g1.js"></script>
-    <script src="units/u10g2.js"></script>
     <script src="units/u10vocab.js"></script>
-    <script src="units/pc5.js"></script>
-    <script src="units/u11g1.js"></script>
-    <script src="units/u11g2.js"></script>
     <script src="units/u11vocab.js"></script>
-    <script src="units/u12g1.js"></script>
-    <script src="units/u12g2.js"></script>
     <script src="units/u12vocab.js"></script>
-    <script src="units/pc6.js"></script>
-    <script src="units/u13g1.js"></script>
-    <script src="units/u13g2.js"></script>
     <script src="units/u13vocab.js"></script>
-    <script src="units/u14g1.js"></script>
-    <script src="units/u14g2.js"></script>
     <script src="units/u14vocab.js"></script>
-    <script src="units/pc7.js"></script>
-    <script src="units/u15g1.js"></script>
-    <script src="units/u15g2.js"></script>
     <script src="units/u15vocab.js"></script>
-    <script src="units/u16g1.js"></script>
-    <script src="units/u16g2.js"></script>
     <script src="units/u16vocab.js"></script>
+
+    <!-- Progress Check files -->
+    <script src="units/pc1.js"></script>
+    <script src="units/pc2.js"></script>
+    <script src="units/pc3.js"></script>
+    <script src="units/pc4.js"></script>
+    <script src="units/pc5.js"></script>
+    <script src="units/pc6.js"></script>
+    <script src="units/pc7.js"></script>
     <script src="units/pc8.js"></script>
 
     <script>
